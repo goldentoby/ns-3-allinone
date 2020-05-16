@@ -86,6 +86,9 @@ main (int argc, char *argv[])
   NetDeviceContainer dSrcGw0 = accessLink.Install (nSrcGw0);
   NetDeviceContainer dGw0Gw1 = bottleneckLink.Install (nGw0Gw1);
   NetDeviceContainer dGw1Dst = accessLink.Install (nGw1Dst);
+  // NetDeviceContainer dSrcGw0 = accessLink.Install (nSrc, gw0);
+  // NetDeviceContainer dGw0Gw1 = bottleneckLink.Install (gw0, gw1);
+  // NetDeviceContainer dGw1Dst = accessLink.Install (gw1, nDst);
   tchPfifo.Install(dSrcGw0);
   tch.Install(dGw0Gw1);
   tchPfifo.Install(dGw1Dst);
@@ -103,7 +106,7 @@ main (int argc, char *argv[])
   address.SetBase("10.20.1.0", "255.255.255.0");
   address.NewNetwork ();
   interfaces_gateway = address.Assign (dGw0Gw1);
-  
+
   address.SetBase("10.30.1.0", "255.255.255.0");
   address.NewNetwork ();
   interfaces_dst = address.Assign (dGw1Dst);
@@ -159,9 +162,9 @@ main (int argc, char *argv[])
 
 void SendStuff (Ptr<Socket> sock, Ipv4Address dstaddr, uint16_t port, uint16_t mdata)
 {
-//  unsigned long long now = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+  // unsigned long long now = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
   Ptr<Packet> p = Create<Packet> (mdata);
-//  NS_LOG_INFO ("time"<<now<<", data: "<<mdata);
+  // NS_LOG_INFO ("time"<<now<<", data: "<<mdata);
   sock->SendTo (p, 0, InetSocketAddress (dstaddr,port));
 
   return;
@@ -174,32 +177,12 @@ void BindSock (Ptr<Socket> sock, Ptr<NetDevice> netdev)
 }
 
 void
-srcSocketRecv (Ptr<Socket> socket)
-{
-  Address from;
-  Ptr<Packet> packet = socket->RecvFrom (from);
-  packet->RemoveAllPacketTags ();
-  packet->RemoveAllByteTags ();
-  NS_LOG_INFO ("Source Received " << packet->GetSize () << " bytes from " << InetSocketAddress::ConvertFrom (from).GetIpv4 ());
-  if (socket->GetBoundNetDevice ())
-    {
-      NS_LOG_INFO ("Socket was bound");
-    } 
-  else
-    {
-      NS_LOG_INFO ("Socket was not bound");
-    }
-}
-
-void
 dstSocketRecv (Ptr<Socket> socket)
 {
-  NS_LOG_INFO ("inside");
   Address from;
   Ptr<Packet> packet = socket->RecvFrom (from);
   packet->RemoveAllPacketTags ();
   packet->RemoveAllByteTags ();
   InetSocketAddress address = InetSocketAddress::ConvertFrom (from);
   NS_LOG_INFO ("Destination Received " << packet->GetSize () << " bytes from " << address.GetIpv4 ());
-
 }
