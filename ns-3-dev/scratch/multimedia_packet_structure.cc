@@ -90,8 +90,6 @@ main (int argc, char *argv[])
   tch.Install(dGw0Gw1);
   tchPfifo.Install(dGw1Dst);
 
-  // Ptr<NetDevice> SrcToGw0=dSrcGw0.Get (0);
-
   // Later, we add IP addresses.
   Ipv4AddressHelper address;
   Ipv4InterfaceContainer interfaces_src;
@@ -101,35 +99,19 @@ main (int argc, char *argv[])
   address.SetBase("10.10.1.0", "255.255.255.0");
   address.NewNetwork ();
   interfaces_src = address.Assign(dSrcGw0);
+
   address.SetBase("10.20.1.0", "255.255.255.0");
   address.NewNetwork ();
   interfaces_gateway = address.Assign (dGw0Gw1);
+  
   address.SetBase("10.30.1.0", "255.255.255.0");
   address.NewNetwork ();
   interfaces_dst = address.Assign (dGw1Dst);
   
   Ipv4GlobalRoutingHelper::PopulateRoutingTables ();
-  // Ptr<Ipv4> ipv4Src = nSrc->GetObject<Ipv4> ();
-  // Ptr<Ipv4> ipv4gw0 = gw0->GetObject<Ipv4> ();
-  // Ptr<Ipv4> ipv4gw1 = gw1->GetObject<Ipv4> ();
-  // Ptr<Ipv4> ipv4Dst = nDst->GetObject<Ipv4> ();
-
-  // Ipv4StaticRoutingHelper ipv4RoutingHelper;
-  // Ptr<Ipv4StaticRouting> staticRoutingSrc = ipv4RoutingHelper.GetStaticRouting (ipv4Src);
-  // Ptr<Ipv4StaticRouting> staticRoutinggw0 = ipv4RoutingHelper.GetStaticRouting (ipv4gw0);
-  // Ptr<Ipv4StaticRouting> staticRoutinggw1 = ipv4RoutingHelper.GetStaticRouting (ipv4gw1);
-  // Ptr<Ipv4StaticRouting> staticRoutingDst = ipv4RoutingHelper.GetStaticRouting (ipv4Dst);
-
-
-  // // Create static routes from Src to Dst
-  // staticRoutinggw1->AddHostRouteTo (Ipv4Address ("10.30.1.2"), Ipv4Address ("10.20.1.3"), 1);
-  // staticRoutinggw0->AddHostRouteTo (Ipv4Address ("10.20.1.3"), Ipv4Address ("10.20.1.2"), 1);
-  // staticRoutingSrc->AddHostRouteTo (Ipv4Address ("10.20.1.2"), Ipv4Address ("10.10.1.1"), 1);
-
-
 
   Ptr<Socket> srcSocket = Socket::CreateSocket (nSrc, TypeId::LookupByName ("ns3::UdpSocketFactory"));
-  uint16_t srcport = 8080;
+  uint16_t srcport = 12344;
   Ipv4Address srcaddr ("10.10.1.2");
   InetSocketAddress src = InetSocketAddress (srcaddr, srcport);
   srcSocket->Bind (src);

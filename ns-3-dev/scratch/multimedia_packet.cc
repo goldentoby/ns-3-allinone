@@ -90,32 +90,33 @@
    ipv4.SetBase ("10.20.1.0", "255.255.255.0");
    Ipv4InterfaceContainer iDstRtrDst = ipv4.Assign (dDstRtrdDst);
  
-   Ptr<Ipv4> ipv4Src = nSrc->GetObject<Ipv4> ();
-   Ptr<Ipv4> ipv4Rtr1 = nRtr1->GetObject<Ipv4> ();
-   Ptr<Ipv4> ipv4Rtr2 = nRtr2->GetObject<Ipv4> ();
-   Ptr<Ipv4> ipv4DstRtr = nDstRtr->GetObject<Ipv4> ();
-   Ptr<Ipv4> ipv4Dst = nDst->GetObject<Ipv4> ();
+  //  Ptr<Ipv4> ipv4Src = nSrc->GetObject<Ipv4> ();
+  //  Ptr<Ipv4> ipv4Rtr1 = nRtr1->GetObject<Ipv4> ();
+  //  Ptr<Ipv4> ipv4Rtr2 = nRtr2->GetObject<Ipv4> ();
+  //  Ptr<Ipv4> ipv4DstRtr = nDstRtr->GetObject<Ipv4> ();
+  //  Ptr<Ipv4> ipv4Dst = nDst->GetObject<Ipv4> ();
  
-   Ipv4StaticRoutingHelper ipv4RoutingHelper;
-   Ptr<Ipv4StaticRouting> staticRoutingSrc = ipv4RoutingHelper.GetStaticRouting (ipv4Src);
-   Ptr<Ipv4StaticRouting> staticRoutingRtr1 = ipv4RoutingHelper.GetStaticRouting (ipv4Rtr1);
-   Ptr<Ipv4StaticRouting> staticRoutingRtr2 = ipv4RoutingHelper.GetStaticRouting (ipv4Rtr2);
-   Ptr<Ipv4StaticRouting> staticRoutingDstRtr = ipv4RoutingHelper.GetStaticRouting (ipv4DstRtr);
-   Ptr<Ipv4StaticRouting> staticRoutingDst = ipv4RoutingHelper.GetStaticRouting (ipv4Dst);
+  //  Ipv4StaticRoutingHelper ipv4RoutingHelper;
+  //  Ptr<Ipv4StaticRouting> staticRoutingSrc = ipv4RoutingHelper.GetStaticRouting (ipv4Src);
+  //  Ptr<Ipv4StaticRouting> staticRoutingRtr1 = ipv4RoutingHelper.GetStaticRouting (ipv4Rtr1);
+  //  Ptr<Ipv4StaticRouting> staticRoutingRtr2 = ipv4RoutingHelper.GetStaticRouting (ipv4Rtr2);
+  //  Ptr<Ipv4StaticRouting> staticRoutingDstRtr = ipv4RoutingHelper.GetStaticRouting (ipv4DstRtr);
+  //  Ptr<Ipv4StaticRouting> staticRoutingDst = ipv4RoutingHelper.GetStaticRouting (ipv4Dst);
  
-   // Create static routes from Src to Dst
-   staticRoutingRtr1->AddHostRouteTo (Ipv4Address ("10.20.1.2"), Ipv4Address ("10.10.1.2"), 2);
-   staticRoutingRtr2->AddHostRouteTo (Ipv4Address ("10.20.1.2"), Ipv4Address ("10.10.2.2"), 2);
+  //  // Create static routes from Src to Dst
+  //  staticRoutingRtr1->AddHostRouteTo (Ipv4Address ("10.20.1.2"), Ipv4Address ("10.10.1.2"), 2);
+  //  staticRoutingRtr2->AddHostRouteTo (Ipv4Address ("10.20.1.2"), Ipv4Address ("10.10.2.2"), 2);
  
-   // Two routes to same destination - setting separate metrics. 
-   // You can switch these to see how traffic gets diverted via different routes
-   staticRoutingSrc->AddHostRouteTo (Ipv4Address ("10.20.1.2"), Ipv4Address ("10.1.1.2"), 1,5);
-   staticRoutingSrc->AddHostRouteTo (Ipv4Address ("10.20.1.2"), Ipv4Address ("10.1.2.2"), 2,10);
+  //  // Two routes to same destination - setting separate metrics. 
+  //  // You can switch these to see how traffic gets diverted via different routes
+  //  staticRoutingSrc->AddHostRouteTo (Ipv4Address ("10.20.1.2"), Ipv4Address ("10.1.1.2"), 1,5);
+  //  staticRoutingSrc->AddHostRouteTo (Ipv4Address ("10.20.1.2"), Ipv4Address ("10.1.2.2"), 2,10);
  
-   // Creating static routes from DST to Source pointing to Rtr1 VIA Rtr2(!)
-   staticRoutingDst->AddHostRouteTo (Ipv4Address ("10.1.1.1"), Ipv4Address ("10.20.1.1"), 1);
-   staticRoutingDstRtr->AddHostRouteTo (Ipv4Address ("10.1.1.1"), Ipv4Address ("10.10.2.1"), 2);
-   staticRoutingRtr2->AddHostRouteTo (Ipv4Address ("10.1.1.1"), Ipv4Address ("10.1.2.1"), 1);
+  //  // Creating static routes from DST to Source pointing to Rtr1 VIA Rtr2(!)
+  //  staticRoutingDst->AddHostRouteTo (Ipv4Address ("10.1.1.1"), Ipv4Address ("10.20.1.1"), 1);
+  //  staticRoutingDstRtr->AddHostRouteTo (Ipv4Address ("10.1.1.1"), Ipv4Address ("10.10.2.1"), 2);
+  //  staticRoutingRtr2->AddHostRouteTo (Ipv4Address ("10.1.1.1"), Ipv4Address ("10.1.2.1"), 1);
+  Ipv4GlobalRoutingHelper::PopulateRoutingTables ();
  
    // There are no apps that can utilize the Socket Option so doing the work directly..
    // Taken from tcp-large-transfer example
