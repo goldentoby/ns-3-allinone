@@ -54,10 +54,6 @@ main (int argc, char *argv[])
   Config::SetDefault ("ns3::TcpSocket::SegmentSize", UintegerValue (segment_size));
   Config::SetDefault ("ns3::TcpSocketBase::WindowScaling", BooleanValue (true));
   Config::SetDefault (queue_disc + "::MaxSize", QueueSizeValue (QueueSize ("200p")));
-  
-  // InternetStackHelper internet;
-  // internet.InstallAll ();
-
 
   TrafficControlHelper tchPfifo;
   uint16_t handle = tchPfifo.SetRootQueueDisc ("ns3::PfifoFastQueueDisc");
@@ -84,11 +80,9 @@ main (int argc, char *argv[])
   
   
   NetDeviceContainer dSrcGw0 = accessLink.Install (nSrcGw0);
-  NetDeviceContainer dGw0Gw1 = bottleneckLink.Install (nGw0Gw1);
   NetDeviceContainer dGw1Dst = accessLink.Install (nGw1Dst);
-  // NetDeviceContainer dSrcGw0 = accessLink.Install (nSrc, gw0);
-  // NetDeviceContainer dGw0Gw1 = bottleneckLink.Install (gw0, gw1);
-  // NetDeviceContainer dGw1Dst = accessLink.Install (gw1, nDst);
+  NetDeviceContainer dGw0Gw1 = bottleneckLink.Install (nGw0Gw1);
+
   tchPfifo.Install(dSrcGw0);
   tch.Install(dGw0Gw1);
   tchPfifo.Install(dGw1Dst);
@@ -126,7 +120,8 @@ main (int argc, char *argv[])
   dstSocket->Bind (dst);
   dstSocket->SetRecvCallback (MakeCallback (&dstSocketRecv));
   
-
+  AsciiTraceHelper ascii;
+  bottleneckLink.EnableAsciiAll (ascii.CreateFileStream ("socket-bound-static-routing.tr"));
   bottleneckLink.EnablePcapAll ("socket-bound-static-routing");
 
   LogComponentEnableAll (LOG_PREFIX_TIME);
