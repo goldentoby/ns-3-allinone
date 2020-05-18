@@ -142,10 +142,16 @@ main (int argc, char *argv[])
   }in.close();
 
   int idx =0;
+  int udp_limit = 65000;
   for (float time = 0.0 ; time<5.0; time+=0.03, idx++){
-      if (v[idx] > 50000){
-        Simulator::Schedule (Seconds (time), &SendStuff, srcSocket, dstaddr, dstport, v[idx]/2);
-        Simulator::Schedule (Seconds (time), &SendStuff, srcSocket, dstaddr, dstport, v[idx]/2);
+      if (v[idx] > udp_limit){
+        int current_size = v[idx];
+        do{
+          Simulator::Schedule (Seconds (time), &SendStuff, srcSocket, dstaddr, dstport, udp_limit);
+          current_size -= udp_limit;
+        }while(current_size > udp_limit);
+        Simulator::Schedule (Seconds (time), &SendStuff, srcSocket, dstaddr, dstport, current_size);
+
       }else {
         Simulator::Schedule (Seconds (time),&SendStuff, srcSocket, dstaddr, dstport, v[idx]);
       }

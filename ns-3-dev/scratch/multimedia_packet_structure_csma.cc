@@ -17,6 +17,7 @@
 #include "ns3/ipv4-list-routing-helper.h"
 #include "ns3/csma-helper.h"
 
+
 using namespace ns3;
 
 NS_LOG_COMPONENT_DEFINE ("MultimediaPacket");
@@ -71,55 +72,58 @@ main (int argc, char *argv[])
   NodeContainer nGw1Dst = NodeContainer (gw1, nDst);
 
   // We create the channels first without any IP addressing information
-  CsmaHelper csma_access, csma_bottleNeck;
-  csma_access.SetChannelAttribute ("DataRate", StringValue(accessBandwidth));
-  csma_access.SetChannelAttribute ("Delay", StringValue(accessDelay));
-  csma_bottleNeck.SetChannelAttribute ("DataRate", StringValue(bottleneckBandwidth));
-  csma_bottleNeck.SetChannelAttribute ("Delay", StringValue(bottleneckDelay));
+  CsmaHelper accessLink, bottleneckLink;
+  accessLink.SetChannelAttribute ("DataRate", StringValue(accessBandwidth));
+  accessLink.SetChannelAttribute ("Delay", StringValue(accessDelay));
+  bottleneckLink.SetChannelAttribute ("DataRate", StringValue(bottleneckBandwidth));
+  bottleneckLink.SetChannelAttribute ("Delay", StringValue(bottleneckDelay));
+  
+  
+  NetDeviceContainer dSrcGw0 = accessLink.Install (nSrcGw0);
+  NetDeviceContainer dGw1Dst = accessLink.Install (nGw1Dst);
+  NetDeviceContainer dGw0Gw1 = bottleneckLink.Install (nGw0Gw1);
 
-
-  NetDeviceContainer dSrcGw0 = csma_access.Install (nSrcGw0);
   tchPfifo.Install(dSrcGw0);
-  NetDeviceContainer dGw0Gw1 = csma_bottleNeck.Install (nGw0Gw1);
   tch.Install(dGw0Gw1);
-  NetDeviceContainer dGw1Dst = csma_access.Install (nGw1Dst);
   tchPfifo.Install(dGw1Dst);
-
-  Ptr<NetDevice> SrcToGw0=dSrcGw0.Get (0);
 
   // Later, we add IP addresses.
   Ipv4AddressHelper address;
   Ipv4InterfaceContainer interfaces_src;
   Ipv4InterfaceContainer interfaces_dst;
   Ipv4InterfaceContainer interfaces_gateway;
-
+  
   address.SetBase("10.10.1.0", "255.255.255.0");
-  address.NewNetwork ();
+  // address.NewNetwork ();
   interfaces_src = address.Assign(dSrcGw0);
 
   address.SetBase("10.20.1.0", "255.255.255.0");
-  address.NewNetwork ();
+  // address.NewNetwork ();
   interfaces_gateway = address.Assign (dGw0Gw1);
 
   address.SetBase("10.30.1.0", "255.255.255.0");
-  address.NewNetwork ();
+  // address.NewNetwork ();
   interfaces_dst = address.Assign (dGw1Dst);
-
+  
   Ipv4GlobalRoutingHelper::PopulateRoutingTables ();
 
   Ptr<Socket> srcSocket = Socket::CreateSocket (nSrc, TypeId::LookupByName ("ns3::UdpSocketFactory"));
-  srcSocket->Bind ();
-  Ptr<Socket> dstSocket = Socket::CreateSocket (nDst, TypeId::LookupByName ("ns3::UdpSocketFactory"));
+  uint16_t srcport = 12344;
+  Ipv4Address srcaddr ("10.10.1.2");
+  InetSocketAddress src = InetSocketAddress (srcaddr, srcport);
+  srcSocket->Bind (src);
+  // srcSocket->Bind ();
 
+  Ptr<Socket> dstSocket = Socket::CreateSocket (nDst, TypeId::LookupByName ("ns3::UdpSocketFactory"));
   uint16_t dstport = 12345;
-  Ipv4Address dstaddr ("10.30.1.1");
+  Ipv4Address dstaddr ("10.30.1.2");
   InetSocketAddress dst = InetSocketAddress (dstaddr, dstport);
   dstSocket->Bind (dst);
   dstSocket->SetRecvCallback (MakeCallback (&dstSocketRecv));
-
-
+  
   AsciiTraceHelper ascii;
-  csma_bottleNeck.EnablePcapAll ("socket-bound-static-routing");
+  bottleneckLink.EnableAsciiAll (ascii.CreateFileStream ("socket-bound-static-routing.tr"));
+  bottleneckLink.EnablePcapAll ("socket-bound-static-routing");
 
   LogComponentEnableAll (LOG_PREFIX_TIME);
   LogComponentEnable ("MultimediaPacket", LOG_LEVEL_INFO);
@@ -132,15 +136,22 @@ main (int argc, char *argv[])
   if (in.is_open()) {
       int i = 0;
       while (in >> element) {
+          // NS_LOG_INFO ("packet size: " << element );
           v[i++] = element;
       }
   }in.close();
 
   int idx =0;
-  for (float time = 0.0 ; time<20.0; time+=0.03, idx++){
-      if (v[idx] > 50000){
-        Simulator::Schedule (Seconds (time), &SendStuff, srcSocket, dstaddr, dstport, v[idx]/2);
-        Simulator::Schedule (Seconds (time), &SendStuff, srcSocket, dstaddr, dstport, v[idx]/2);
+  int udp_limit = 65000;
+  for (float time = 0.0 ; time<5.0; time+=0.03, idx++){
+      if (v[idx] > udp_limit){
+        int current_size = v[idx];
+        do{
+          Simulator::Schedule (Seconds (time), &SendStuff, srcSocket, dstaddr, dstport, udp_limit);
+          current_size -= udp_limit;
+        }while(current_size > udp_limit);
+        Simulator::Schedule (Seconds (time), &SendStuff, srcSocket, dstaddr, dstport, current_size);
+
       }else {
         Simulator::Schedule (Seconds (time),&SendStuff, srcSocket, dstaddr, dstport, v[idx]);
       }
@@ -153,8 +164,11 @@ main (int argc, char *argv[])
 
 void SendStuff (Ptr<Socket> sock, Ipv4Address dstaddr, uint16_t port, uint16_t mdata)
 {
+  // unsigned long long now = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
   Ptr<Packet> p = Create<Packet> (mdata);
+  // NS_LOG_INFO ("time"<<now<<", data: "<<mdata);
   sock->SendTo (p, 0, InetSocketAddress (dstaddr,port));
+
   return;
 }
 
@@ -172,6 +186,5 @@ dstSocketRecv (Ptr<Socket> socket)
   packet->RemoveAllPacketTags ();
   packet->RemoveAllByteTags ();
   InetSocketAddress address = InetSocketAddress::ConvertFrom (from);
-  unsigned long long now = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
-  NS_LOG_INFO ("Destination Received " << packet->GetSize () << " bytes from " << address.GetIpv4 ()<< ", " << now << " milliseconds since the Epoch");
+  NS_LOG_INFO ("Destination Received " << packet->GetSize () << " bytes from " << address.GetIpv4 ());
 }
