@@ -94,15 +94,15 @@ main (int argc, char *argv[])
   Ipv4InterfaceContainer interfaces_gateway;
   
   address.SetBase("10.10.1.0", "255.255.255.0");
-  address.NewNetwork ();
+  // address.NewNetwork ();
   interfaces_src = address.Assign(dSrcGw0);
 
   address.SetBase("10.20.1.0", "255.255.255.0");
-  address.NewNetwork ();
+  // address.NewNetwork ();
   interfaces_gateway = address.Assign (dGw0Gw1);
 
   address.SetBase("10.30.1.0", "255.255.255.0");
-  address.NewNetwork ();
+  // address.NewNetwork ();
   interfaces_dst = address.Assign (dGw1Dst);
   
   Ipv4GlobalRoutingHelper::PopulateRoutingTables ();
@@ -112,6 +112,7 @@ main (int argc, char *argv[])
   Ipv4Address srcaddr ("10.10.1.2");
   InetSocketAddress src = InetSocketAddress (srcaddr, srcport);
   srcSocket->Bind (src);
+  // srcSocket->Bind ();
 
   Ptr<Socket> dstSocket = Socket::CreateSocket (nDst, TypeId::LookupByName ("ns3::UdpSocketFactory"));
   uint16_t dstport = 12345;
