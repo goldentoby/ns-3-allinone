@@ -1,0 +1,6 @@
+Waf: Entering directory `/Users/toby.liao/Documents/storage/course/ns3/ns-3-allinone/ns-3-dev/build'
+Waf: Leaving directory `/Users/toby.liao/Documents/storage/course/ns3/ns-3-allinone/ns-3-dev/build'
+Build commands will be stored in build/compile_commands.json
+'build' finished successfully (3.030s)
+Simulation with COBALT QueueDisc: Start
+Simulation with COBALT QueueDisc: End
