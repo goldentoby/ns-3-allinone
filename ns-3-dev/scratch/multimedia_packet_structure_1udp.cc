@@ -3,6 +3,10 @@
 #include <string>
 #include <cassert>
 #include <ctime>
+#include <ostream>
+
+#include "ns3/stats-module.h"
+#include "examples/stats/wifi-example-apps.h"
 
 #include "ns3/applications-module.h"
 #include "ns3/ipv6-static-routing-helper.h"
@@ -27,8 +31,66 @@ int segment_size = 1446;
 int packet_sent = 0;
 int packet_received = 0;
 float TTBF = 0;
-unsigned long long timestamp = 0;
 std::vector< int > TTFB_arr;
+//----------------------------------------------------------------------
+//-- TimestampTag
+//------------------------------------------------------
+TypeId
+TimestampTag::GetTypeId (void)
+{
+  static TypeId tid = TypeId ("TimestampTag")
+    .SetParent<Tag> ()
+    .AddConstructor<TimestampTag> ()
+    .AddAttribute ("Timestamp",
+                   "Some momentous point in time!",
+                   EmptyAttributeValue (),
+                   MakeTimeAccessor (&TimestampTag::GetTimestamp),
+                   MakeTimeChecker ())
+  ;
+  return tid;
+}
+TypeId
+TimestampTag::GetInstanceTypeId (void) const
+{
+  return GetTypeId ();
+}
+
+uint32_t
+TimestampTag::GetSerializedSize (void) const
+{
+  return 8;
+}
+void
+TimestampTag::Serialize (TagBuffer i) const
+{
+  int64_t t = m_timestamp.GetNanoSeconds ();
+  i.Write ((const uint8_t *)&t, 8);
+}
+void
+TimestampTag::Deserialize (TagBuffer i)
+{
+  int64_t t;
+  i.Read ((uint8_t *)&t, 8);
+  m_timestamp = NanoSeconds (t);
+}
+
+void
+TimestampTag::SetTimestamp (Time time)
+{
+  m_timestamp = time;
+}
+Time
+TimestampTag::GetTimestamp (void) const
+{
+  return m_timestamp;
+}
+
+void
+TimestampTag::Print (std::ostream &os) const
+{
+  os << "t=" << m_timestamp;
+}
+
 void CheckQueueSize (Ptr<QueueDisc> queue,std::string queue_disc_type)
 {
   double qSize = queue->GetCurrentSize ().GetValue ();
@@ -189,19 +251,24 @@ void experiment(std::string queue_disc_type)
   Simulator::Stop (Seconds (stoptime));
   Simulator::Run ();
   Simulator::Destroy ();
-  NS_LOG_INFO ("processed: "<<packet_received<<"/"<<packet_sent);
+  NS_LOG_INFO ("processed: "<<packet_sent-packet_received<<"/"<<packet_sent);
   float tmp_sum = 0.0;
   for (int i=0; i<TTFB_arr.size(); i++){
     tmp_sum += TTFB_arr[i];
   }
   NS_LOG_INFO ("TTBL Latency: "<<tmp_sum/TTFB_arr.size());
+  TTFB_arr.clear();
+  packet_received = 0;
+  packet_sent = 0;
 }
 
 void SendStuff (Ptr<Socket> sock, Ipv4Address dstaddr, uint16_t port, uint16_t mdata)
 {
-  unsigned long long now = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
-  timestamp = now;
+  
+  TimestampTag timestamp;
+  timestamp.SetTimestamp (Simulator::Now());
   Ptr<Packet> p = Create<Packet> (mdata);
+  p->AddByteTag (timestamp);
   sock->SendTo (p, 0, InetSocketAddress (dstaddr,port));
   packet_sent++;
   return;
@@ -217,14 +284,17 @@ void
 dstSocketRecv (Ptr<Socket> socket)
 {
   Address from;
-  unsigned long long now = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
-  TTFB_arr.push_back(now - timestamp);
   Ptr<Packet> packet = socket->RecvFrom (from);
+  TimestampTag timestamp;
+  if (packet->FindFirstMatchingByteTag(timestamp)) {
+    TTFB_arr.push_back(Simulator::Now().GetMilliSeconds() - timestamp.GetTimestamp().GetMilliSeconds());
+  }
+
   packet->RemoveAllPacketTags ();
   packet->RemoveAllByteTags ();
-  InetSocketAddress address = InetSocketAddress::ConvertFrom (from);
+  // InetSocketAddress address = InetSocketAddress::ConvertFrom (from);
   packet_received++;
-  NS_LOG_INFO ("Destination Received " << packet->GetSize () << " bytes from " << address.GetIpv4 ());
+  // NS_LOG_INFO ("Destination Received " << packet->GetSize () << " bytes from " << address.GetIpv4 ());
 }
 
 int 
@@ -232,6 +302,10 @@ main (int argc, char **argv)
 {
   CommandLine cmd;
   cmd.Parse (argc, argv);
+  std::cout << "Simulation with FIFO QueueDisc: Start\n";
+  experiment ("FifoQueueDisc");
+  std::cout << "Simulation with FIFO QueueDisc: End\n";
+  // std::cout << "------------------------------------------------\n";
   // std::cout << "Simulation with COBALT QueueDisc: Start\n";
   // experiment ("CobaltQueueDisc");
   // std::cout << "Simulation with COBALT QueueDisc: End\n";
@@ -239,10 +313,6 @@ main (int argc, char **argv)
   // std::cout << "Simulation with CODEL QueueDisc: Start\n";
   // experiment ("CoDelQueueDisc");
   // std::cout << "Simulation with CODEL QueueDisc: End\n";
-  // std::cout << "------------------------------------------------\n";
-  std::cout << "Simulation with FIFO QueueDisc: Start\n";
-  experiment ("FifoQueueDisc");
-  std::cout << "Simulation with FIFO QueueDisc: End\n";
   // std::cout << "------------------------------------------------\n";
   // std::cout << "Simulation with PIE QueueDisc: Start\n";
   // experiment ("PieQueueDisc");
@@ -263,6 +333,6 @@ main (int argc, char **argv)
   // std::cout << "Simulation with PFIFO QueueDisc: Start\n";
   // experiment ("PfifoFastQueueDisc");
   // std::cout << "Simulation with PFIFO QueueDisc: End\n";
-  system("cd ./Multimedia_packet; source exec_overall.sh");
+  // system("cd ./Multimedia_packet; source exec_overall.sh");
   return 0;
 }

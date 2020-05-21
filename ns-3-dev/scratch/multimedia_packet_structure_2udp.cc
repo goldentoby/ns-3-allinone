@@ -205,12 +205,15 @@ void experiment(std::string queue_disc_type)
   Simulator::Stop (Seconds (stoptime));
   Simulator::Run ();
   Simulator::Destroy ();
-  NS_LOG_INFO ("processed: "<<packet_received<<"/"<<packet_sent);
+  NS_LOG_INFO ("processed: "<<(packet_sent-packet_received)<<"/"<<packet_sent);
   float tmp_sum = 0.0;
   for (int i=0; i<TTFB_arr.size(); i++){
     tmp_sum += TTFB_arr[i];
   }
   NS_LOG_INFO ("TTBL Latency: "<<tmp_sum/TTFB_arr.size());
+  TTFB_arr.clear();
+  packet_received = 0;
+  packet_sent = 0;
 }
 
 void SendStuff (Ptr<Socket> sock, Ipv4Address dstaddr, uint16_t port, uint16_t mdata)
@@ -238,9 +241,9 @@ dstSocketRecv (Ptr<Socket> socket)
   Ptr<Packet> packet = socket->RecvFrom (from);
   packet->RemoveAllPacketTags ();
   packet->RemoveAllByteTags ();
-  InetSocketAddress address = InetSocketAddress::ConvertFrom (from);
+  // InetSocketAddress address = InetSocketAddress::ConvertFrom (from);
   packet_received++;
-  NS_LOG_INFO ("Destination Received " << packet->GetSize () << " bytes from " << address.GetIpv4 ());
+  // NS_LOG_INFO ("Destination Received " << packet->GetSize () << " bytes from " << address.GetIpv4 ());
 }
 
 int 
@@ -248,37 +251,37 @@ main (int argc, char **argv)
 {
   CommandLine cmd;
   cmd.Parse (argc, argv);
-  // std::cout << "Simulation with COBALT QueueDisc: Start\n";
-  // experiment ("CobaltQueueDisc");
-  // std::cout << "Simulation with COBALT QueueDisc: End\n";
-  // std::cout << "------------------------------------------------\n";
-  // std::cout << "Simulation with CODEL QueueDisc: Start\n";
-  // experiment ("CoDelQueueDisc");
-  // std::cout << "Simulation with CODEL QueueDisc: End\n";
-  // std::cout << "------------------------------------------------\n";
+  std::cout << "Simulation with COBALT QueueDisc: Start\n";
+  experiment ("CobaltQueueDisc");
+  std::cout << "Simulation with COBALT QueueDisc: End\n";
+  std::cout << "------------------------------------------------\n";
+  std::cout << "Simulation with CODEL QueueDisc: Start\n";
+  experiment ("CoDelQueueDisc");
+  std::cout << "Simulation with CODEL QueueDisc: End\n";
+  std::cout << "------------------------------------------------\n";
   std::cout << "Simulation with FIFO QueueDisc: Start\n";
   experiment ("FifoQueueDisc");
   std::cout << "Simulation with FIFO QueueDisc: End\n";
-  // std::cout << "------------------------------------------------\n";
-  // std::cout << "Simulation with PIE QueueDisc: Start\n";
-  // experiment ("PieQueueDisc");
-  // std::cout << "Simulation with PIE QueueDisc: End\n";
-  // std::cout << "------------------------------------------------\n";
-  // std::cout << "Simulation with RED QueueDisc: Start\n";
-  // experiment ("RedQueueDisc");
-  // std::cout << "Simulation with RED QueueDisc: End\n";
+  std::cout << "------------------------------------------------\n";
+  std::cout << "Simulation with PIE QueueDisc: Start\n";
+  experiment ("PieQueueDisc");
+  std::cout << "Simulation with PIE QueueDisc: End\n";
+  std::cout << "------------------------------------------------\n";
+  std::cout << "Simulation with RED QueueDisc: Start\n";
+  experiment ("RedQueueDisc");
+  std::cout << "Simulation with RED QueueDisc: End\n";
   // std::cout << "------------------------------------------------\n";
   // std::cout << "Simulation with TBF QueueDisc: Start\n";
   // experiment ("TbfQueueDisc");
   // std::cout << "Simulation with TBF QueueDisc: End\n";
-  // std::cout << "------------------------------------------------\n";
-  // std::cout << "Simulation with FQCODEL QueueDisc: Start\n";
-  // experiment ("FqCoDelQueueDisc");
-  // std::cout << "Simulation with FQCODEL QueueDisc: End\n";
-  // std::cout << "------------------------------------------------\n";
-  // std::cout << "Simulation with PFIFO QueueDisc: Start\n";
-  // experiment ("PfifoFastQueueDisc");
-  // std::cout << "Simulation with PFIFO QueueDisc: End\n";
+  std::cout << "------------------------------------------------\n";
+  std::cout << "Simulation with FQCODEL QueueDisc: Start\n";
+  experiment ("FqCoDelQueueDisc");
+  std::cout << "Simulation with FQCODEL QueueDisc: End\n";
+  std::cout << "------------------------------------------------\n";
+  std::cout << "Simulation with PFIFO QueueDisc: Start\n";
+  experiment ("PfifoFastQueueDisc");
+  std::cout << "Simulation with PFIFO QueueDisc: End\n";
   system("cd ./Multimedia_packet; source exec_overall.sh");
   return 0;
 }
