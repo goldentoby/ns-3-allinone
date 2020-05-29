@@ -4,6 +4,7 @@
 #include <cassert>
 #include <ctime>
 #include <ostream>
+#include <map>
 
 #include "ns3/stats-module.h"
 #include "examples/stats/wifi-example-apps.h"
@@ -30,8 +31,13 @@ std::string dir = "Multimedia_packet/";
 int segment_size = 1446;
 int packet_sent = 0;
 int packet_received = 0;
-float TTBF = 0;
+int16_t serial_no = 0;
 std::vector< int > TTFB_arr;
+std::vector< int > TTFB_ts;
+std::map<uint16_t, uint16_t> send_map;
+std::map<uint16_t, uint16_t> send_serialno_map;
+std::map<uint16_t, uint16_t> receive_map;
+std::map<uint16_t, uint16_t>::iterator iter;
 //----------------------------------------------------------------------
 //-- TimestampTag
 //------------------------------------------------------
@@ -119,6 +125,7 @@ void experiment(std::string queue_disc_type)
 { 
   // int segment_size = 1446;
   float stoptime = 27.0;
+  int simulation_start_ts = 0;
   std::string bottleneckBandwidth = "10Mbps";
   std::string bottleneckDelay = "1ms";
   std::string accessBandwidth = "100Mbps";
@@ -249,17 +256,48 @@ void experiment(std::string queue_disc_type)
   
   Simulator::Schedule (Seconds (0), &TraceCwnd, queue_disc_type);
   Simulator::Stop (Seconds (stoptime));
+  simulation_start_ts = Simulator::Now().GetMilliSeconds();
   Simulator::Run ();
   Simulator::Destroy ();
-  NS_LOG_INFO ("processed: "<<packet_sent-packet_received<<"/"<<packet_sent);
+  NS_LOG_INFO ("Loss/Total: "<<packet_sent-packet_received<<"/"<<packet_sent);
   float tmp_sum = 0.0;
+  
+  std::string str1 = "";
+  str1 = queue_disc_type;
+  std::ofstream data_trace;
+  data_trace.open(str1.append(".csv"));
   for (int i=0; i<TTFB_arr.size(); i++){
+    data_trace << ((float)TTFB_ts[i] - (float)simulation_start_ts)/1000<<","<<TTFB_arr[i]<<"\n";
     tmp_sum += TTFB_arr[i];
-  }
-  NS_LOG_INFO ("TTBL Latency: "<<tmp_sum/TTFB_arr.size());
+  } data_trace.close();
+  NS_LOG_INFO ("TTBL Latency: "<<(float)tmp_sum/(float)TTFB_arr.size());
+
+  std::string str2 = "";
+  str2 = queue_disc_type;
+  std::ofstream sender_packet_stream;
+  sender_packet_stream.open(str2.append("_sender_packet_stream.csv"));
+  for (iter = send_map.begin(); iter != send_map.end(); iter++){
+    sender_packet_stream<< send_serialno_map[iter->first] <<","<< iter->second<<"\n";
+  }sender_packet_stream.close();
+
+  std::string str3 = "";
+  str3 = queue_disc_type;
+  std::ofstream receiver_packet_stream;
+  receiver_packet_stream.open(str3.append("_receiver_packet_stream.csv"));
+  for (iter = receive_map.begin(); iter != receive_map.end(); iter++){
+    receiver_packet_stream<< send_serialno_map[iter->first] <<","<< iter->second<<"\n";
+  }receiver_packet_stream.close();
+
   TTFB_arr.clear();
+  TTFB_ts.clear();
+  send_serialno_map.clear();
+  send_map.clear();
+  receive_map.clear();
   packet_received = 0;
   packet_sent = 0;
+  serial_no = 0;
+
+
 }
 
 void SendStuff (Ptr<Socket> sock, Ipv4Address dstaddr, uint16_t port, uint16_t mdata)
@@ -270,6 +308,8 @@ void SendStuff (Ptr<Socket> sock, Ipv4Address dstaddr, uint16_t port, uint16_t m
   Ptr<Packet> p = Create<Packet> (mdata);
   p->AddByteTag (timestamp);
   sock->SendTo (p, 0, InetSocketAddress (dstaddr,port));
+  send_map[(int16_t)p->GetUid()] = mdata;
+  send_serialno_map[(int16_t)p->GetUid()] = serial_no++;
   packet_sent++;
   return;
 }
@@ -288,10 +328,15 @@ dstSocketRecv (Ptr<Socket> socket)
   TimestampTag timestamp;
   if (packet->FindFirstMatchingByteTag(timestamp)) {
     TTFB_arr.push_back(Simulator::Now().GetMilliSeconds() - timestamp.GetTimestamp().GetMilliSeconds());
+    TTFB_ts.push_back(timestamp.GetTimestamp().GetMilliSeconds());
   }
 
+  receive_map[(int16_t)packet->GetUid()] = send_map[(int16_t)packet->GetUid()];
   packet->RemoveAllPacketTags ();
   packet->RemoveAllByteTags ();
+  // std::cout<<"packet UID: " << packet->GetUid ()<<std::endl;
+
+  // NS_LOG_INFO ("packet UID: " << packet->GetUid ());
   // InetSocketAddress address = InetSocketAddress::ConvertFrom (from);
   packet_received++;
   // NS_LOG_INFO ("Destination Received " << packet->GetSize () << " bytes from " << address.GetIpv4 ());
@@ -305,34 +350,31 @@ main (int argc, char **argv)
   std::cout << "Simulation with FIFO QueueDisc: Start\n";
   experiment ("FifoQueueDisc");
   std::cout << "Simulation with FIFO QueueDisc: End\n";
-  // std::cout << "------------------------------------------------\n";
-  // std::cout << "Simulation with COBALT QueueDisc: Start\n";
-  // experiment ("CobaltQueueDisc");
-  // std::cout << "Simulation with COBALT QueueDisc: End\n";
-  // std::cout << "------------------------------------------------\n";
-  // std::cout << "Simulation with CODEL QueueDisc: Start\n";
-  // experiment ("CoDelQueueDisc");
-  // std::cout << "Simulation with CODEL QueueDisc: End\n";
-  // std::cout << "------------------------------------------------\n";
-  // std::cout << "Simulation with PIE QueueDisc: Start\n";
-  // experiment ("PieQueueDisc");
-  // std::cout << "Simulation with PIE QueueDisc: End\n";
-  // std::cout << "------------------------------------------------\n";
-  // std::cout << "Simulation with RED QueueDisc: Start\n";
-  // experiment ("RedQueueDisc");
-  // std::cout << "Simulation with RED QueueDisc: End\n";
-  // std::cout << "------------------------------------------------\n";
-  // std::cout << "Simulation with TBF QueueDisc: Start\n";
-  // experiment ("TbfQueueDisc");
-  // std::cout << "Simulation with TBF QueueDisc: End\n";
-  // std::cout << "------------------------------------------------\n";
-  // std::cout << "Simulation with FQCODEL QueueDisc: Start\n";
-  // experiment ("FqCoDelQueueDisc");
-  // std::cout << "Simulation with FQCODEL QueueDisc: End\n";
-  // std::cout << "------------------------------------------------\n";
-  // std::cout << "Simulation with PFIFO QueueDisc: Start\n";
-  // experiment ("PfifoFastQueueDisc");
-  // std::cout << "Simulation with PFIFO QueueDisc: End\n";
-  // system("cd ./Multimedia_packet; source exec_overall.sh");
+  std::cout << "------------------------------------------------\n";
+  std::cout << "Simulation with COBALT QueueDisc: Start\n";
+  experiment ("CobaltQueueDisc");
+  std::cout << "Simulation with COBALT QueueDisc: End\n";
+  std::cout << "------------------------------------------------\n";
+  std::cout << "Simulation with CODEL QueueDisc: Start\n";
+  experiment ("CoDelQueueDisc");
+  std::cout << "Simulation with CODEL QueueDisc: End\n";
+  std::cout << "------------------------------------------------\n";
+  std::cout << "Simulation with PIE QueueDisc: Start\n";
+  experiment ("PieQueueDisc");
+  std::cout << "Simulation with PIE QueueDisc: End\n";
+  std::cout << "------------------------------------------------\n";
+  std::cout << "Simulation with RED QueueDisc: Start\n";
+  experiment ("RedQueueDisc");
+  std::cout << "Simulation with RED QueueDisc: End\n";
+  std::cout << "------------------------------------------------\n";
+  std::cout << "Simulation with FQCODEL QueueDisc: Start\n";
+  experiment ("FqCoDelQueueDisc");
+  std::cout << "Simulation with FQCODEL QueueDisc: End\n";
+  std::cout << "------------------------------------------------\n";
+  std::cout << "Simulation with PFIFO QueueDisc: Start\n";
+  experiment ("PfifoFastQueueDisc");
+  std::cout << "Simulation with PFIFO QueueDisc: End\n";
+  
+  system("cd ./Multimedia_packet; source exec_overall.sh");
   return 0;
 }

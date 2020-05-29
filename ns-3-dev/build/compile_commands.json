@@ -6226,12 +6226,12 @@
   },
   {
     "directory": "/Users/toby.liao/Documents/storage/course/ns3/ns-3-allinone/ns-3-dev/build",
-    "command": "/usr/bin/clang++ -O0 -ggdb -g3 -Wall -Werror -Wno-unused-local-typedefs -Wno-potentially-evaluated-expression -std=c++11 -I. -I.. -I/usr/local/include -I/usr/include/libxml2 -DNS3_BUILD_PROFILE_DEBUG -DNS3_ASSERT_ENABLE -DNS3_LOG_ENABLE -DHAVE_SYS_IOCTL_H=1 -DHAVE_IF_NETS_H=1 -DHAVE_NET_ETHERNET_H=1 -DHAVE_SQLITE3=1 ../scratch/test3.cc -c -o/Users/toby.liao/Documents/storage/course/ns3/ns-3-allinone/ns-3-dev/build/scratch/test3.cc.6.o -I/usr/local/opt/qt/include",
+    "command": "/usr/bin/clang++ -O0 -ggdb -g3 -Wall -Werror -Wno-unused-local-typedefs -Wno-potentially-evaluated-expression -std=c++11 -I. -I.. -I/usr/local/include -I/usr/include/libxml2 -DNS3_BUILD_PROFILE_DEBUG -DNS3_ASSERT_ENABLE -DNS3_LOG_ENABLE -DHAVE_SYS_IOCTL_H=1 -DHAVE_IF_NETS_H=1 -DHAVE_NET_ETHERNET_H=1 -DHAVE_SQLITE3=1 ../scratch/test3.cc -c -o/Users/toby.liao/Documents/storage/course/ns3/ns-3-allinone/ns-3-dev/build/scratch/test3.cc.7.o -I/usr/local/opt/qt/include",
     "file": "../scratch/test3.cc"
   },
   {
     "directory": "/Users/toby.liao/Documents/storage/course/ns3/ns-3-allinone/ns-3-dev/build",
-    "command": "/usr/bin/clang++ -O0 -ggdb -g3 -Wall -Werror -Wno-unused-local-typedefs -Wno-potentially-evaluated-expression -std=c++11 -I. -I.. -I/usr/local/include -I/usr/include/libxml2 -DNS3_BUILD_PROFILE_DEBUG -DNS3_ASSERT_ENABLE -DNS3_LOG_ENABLE -DHAVE_SYS_IOCTL_H=1 -DHAVE_IF_NETS_H=1 -DHAVE_NET_ETHERNET_H=1 -DHAVE_SQLITE3=1 ../scratch/scratch-simulator.cc -c -o/Users/toby.liao/Documents/storage/course/ns3/ns-3-allinone/ns-3-dev/build/scratch/scratch-simulator.cc.7.o -I/usr/local/opt/qt/include",
+    "command": "/usr/bin/clang++ -O0 -ggdb -g3 -Wall -Werror -Wno-unused-local-typedefs -Wno-potentially-evaluated-expression -std=c++11 -I. -I.. -I/usr/local/include -I/usr/include/libxml2 -DNS3_BUILD_PROFILE_DEBUG -DNS3_ASSERT_ENABLE -DNS3_LOG_ENABLE -DHAVE_SYS_IOCTL_H=1 -DHAVE_IF_NETS_H=1 -DHAVE_NET_ETHERNET_H=1 -DHAVE_SQLITE3=1 ../scratch/scratch-simulator.cc -c -o/Users/toby.liao/Documents/storage/course/ns3/ns-3-allinone/ns-3-dev/build/scratch/scratch-simulator.cc.8.o -I/usr/local/opt/qt/include",
     "file": "../scratch/scratch-simulator.cc"
   },
   {
@@ -6241,37 +6241,37 @@
   },
   {
     "directory": "/Users/toby.liao/Documents/storage/course/ns3/ns-3-allinone/ns-3-dev/build",
-    "command": "/usr/bin/clang++ -O0 -ggdb -g3 -Wall -Werror -Wno-unused-local-typedefs -Wno-potentially-evaluated-expression -std=c++11 -I. -I.. -I/usr/local/include -I/usr/include/libxml2 -DNS3_BUILD_PROFILE_DEBUG -DNS3_ASSERT_ENABLE -DNS3_LOG_ENABLE -DHAVE_SYS_IOCTL_H=1 -DHAVE_IF_NETS_H=1 -DHAVE_NET_ETHERNET_H=1 -DHAVE_SQLITE3=1 ../scratch/myfirst.cc -c -o/Users/toby.liao/Documents/storage/course/ns3/ns-3-allinone/ns-3-dev/build/scratch/myfirst.cc.8.o -I/usr/local/opt/qt/include",
+    "command": "/usr/bin/clang++ -O0 -ggdb -g3 -Wall -Werror -Wno-unused-local-typedefs -Wno-potentially-evaluated-expression -std=c++11 -I. -I.. -I/usr/local/include -I/usr/include/libxml2 -DNS3_BUILD_PROFILE_DEBUG -DNS3_ASSERT_ENABLE -DNS3_LOG_ENABLE -DHAVE_SYS_IOCTL_H=1 -DHAVE_IF_NETS_H=1 -DHAVE_NET_ETHERNET_H=1 -DHAVE_SQLITE3=1 ../scratch/myfirst.cc -c -o/Users/toby.liao/Documents/storage/course/ns3/ns-3-allinone/ns-3-dev/build/scratch/myfirst.cc.9.o -I/usr/local/opt/qt/include",
     "file": "../scratch/myfirst.cc"
   },
   {
     "directory": "/Users/toby.liao/Documents/storage/course/ns3/ns-3-allinone/ns-3-dev/build",
-    "command": "/usr/bin/clang++ -O0 -ggdb -g3 -Wall -Werror -Wno-unused-local-typedefs -Wno-potentially-evaluated-expression -std=c++11 -I. -I.. -I/usr/local/include -I/usr/include/libxml2 -DNS3_BUILD_PROFILE_DEBUG -DNS3_ASSERT_ENABLE -DNS3_LOG_ENABLE -DHAVE_SYS_IOCTL_H=1 -DHAVE_IF_NETS_H=1 -DHAVE_NET_ETHERNET_H=1 -DHAVE_SQLITE3=1 ../scratch/test.cc -c -o/Users/toby.liao/Documents/storage/course/ns3/ns-3-allinone/ns-3-dev/build/scratch/test.cc.10.o -I/usr/local/opt/qt/include",
+    "command": "/usr/bin/clang++ -O0 -ggdb -g3 -Wall -Werror -Wno-unused-local-typedefs -Wno-potentially-evaluated-expression -std=c++11 -I. -I.. -I/usr/local/include -I/usr/include/libxml2 -DNS3_BUILD_PROFILE_DEBUG -DNS3_ASSERT_ENABLE -DNS3_LOG_ENABLE -DHAVE_SYS_IOCTL_H=1 -DHAVE_IF_NETS_H=1 -DHAVE_NET_ETHERNET_H=1 -DHAVE_SQLITE3=1 ../scratch/test.cc -c -o/Users/toby.liao/Documents/storage/course/ns3/ns-3-allinone/ns-3-dev/build/scratch/test.cc.11.o -I/usr/local/opt/qt/include",
     "file": "../scratch/test.cc"
   },
   {
     "directory": "/Users/toby.liao/Documents/storage/course/ns3/ns-3-allinone/ns-3-dev/build",
-    "command": "/usr/bin/clang++ -O0 -ggdb -g3 -Wall -Werror -Wno-unused-local-typedefs -Wno-potentially-evaluated-expression -std=c++11 -I. -I.. -I/usr/local/include -I/usr/include/libxml2 -DNS3_BUILD_PROFILE_DEBUG -DNS3_ASSERT_ENABLE -DNS3_LOG_ENABLE -DHAVE_SYS_IOCTL_H=1 -DHAVE_IF_NETS_H=1 -DHAVE_NET_ETHERNET_H=1 -DHAVE_SQLITE3=1 ../scratch/amq-comparison.cc -c -o/Users/toby.liao/Documents/storage/course/ns3/ns-3-allinone/ns-3-dev/build/scratch/amq-comparison.cc.11.o -I/usr/local/opt/qt/include",
+    "command": "/usr/bin/clang++ -O0 -ggdb -g3 -Wall -Werror -Wno-unused-local-typedefs -Wno-potentially-evaluated-expression -std=c++11 -I. -I.. -I/usr/local/include -I/usr/include/libxml2 -DNS3_BUILD_PROFILE_DEBUG -DNS3_ASSERT_ENABLE -DNS3_LOG_ENABLE -DHAVE_SYS_IOCTL_H=1 -DHAVE_IF_NETS_H=1 -DHAVE_NET_ETHERNET_H=1 -DHAVE_SQLITE3=1 ../scratch/amq-comparison.cc -c -o/Users/toby.liao/Documents/storage/course/ns3/ns-3-allinone/ns-3-dev/build/scratch/amq-comparison.cc.12.o -I/usr/local/opt/qt/include",
     "file": "../scratch/amq-comparison.cc"
   },
   {
     "directory": "/Users/toby.liao/Documents/storage/course/ns3/ns-3-allinone/ns-3-dev/build",
-    "command": "/usr/bin/clang++ -O0 -ggdb -g3 -Wall -Werror -Wno-unused-local-typedefs -Wno-potentially-evaluated-expression -std=c++11 -I. -I.. -I/usr/local/include -I/usr/include/libxml2 -DNS3_BUILD_PROFILE_DEBUG -DNS3_ASSERT_ENABLE -DNS3_LOG_ENABLE -DHAVE_SYS_IOCTL_H=1 -DHAVE_IF_NETS_H=1 -DHAVE_NET_ETHERNET_H=1 -DHAVE_SQLITE3=1 ../scratch/hw1.1.cc -c -o/Users/toby.liao/Documents/storage/course/ns3/ns-3-allinone/ns-3-dev/build/scratch/hw1.1.cc.12.o -I/usr/local/opt/qt/include",
+    "command": "/usr/bin/clang++ -O0 -ggdb -g3 -Wall -Werror -Wno-unused-local-typedefs -Wno-potentially-evaluated-expression -std=c++11 -I. -I.. -I/usr/local/include -I/usr/include/libxml2 -DNS3_BUILD_PROFILE_DEBUG -DNS3_ASSERT_ENABLE -DNS3_LOG_ENABLE -DHAVE_SYS_IOCTL_H=1 -DHAVE_IF_NETS_H=1 -DHAVE_NET_ETHERNET_H=1 -DHAVE_SQLITE3=1 ../scratch/hw1.1.cc -c -o/Users/toby.liao/Documents/storage/course/ns3/ns-3-allinone/ns-3-dev/build/scratch/hw1.1.cc.13.o -I/usr/local/opt/qt/include",
     "file": "../scratch/hw1.1.cc"
   },
   {
     "directory": "/Users/toby.liao/Documents/storage/course/ns3/ns-3-allinone/ns-3-dev/build",
-    "command": "/usr/bin/clang++ -O0 -ggdb -g3 -Wall -Werror -Wno-unused-local-typedefs -Wno-potentially-evaluated-expression -std=c++11 -I. -I.. -I/usr/local/include -I/usr/include/libxml2 -DNS3_BUILD_PROFILE_DEBUG -DNS3_ASSERT_ENABLE -DNS3_LOG_ENABLE -DHAVE_SYS_IOCTL_H=1 -DHAVE_IF_NETS_H=1 -DHAVE_NET_ETHERNET_H=1 -DHAVE_SQLITE3=1 ../scratch/hw_skeleton.cc -c -o/Users/toby.liao/Documents/storage/course/ns3/ns-3-allinone/ns-3-dev/build/scratch/hw_skeleton.cc.13.o -I/usr/local/opt/qt/include",
+    "command": "/usr/bin/clang++ -O0 -ggdb -g3 -Wall -Werror -Wno-unused-local-typedefs -Wno-potentially-evaluated-expression -std=c++11 -I. -I.. -I/usr/local/include -I/usr/include/libxml2 -DNS3_BUILD_PROFILE_DEBUG -DNS3_ASSERT_ENABLE -DNS3_LOG_ENABLE -DHAVE_SYS_IOCTL_H=1 -DHAVE_IF_NETS_H=1 -DHAVE_NET_ETHERNET_H=1 -DHAVE_SQLITE3=1 ../scratch/hw_skeleton.cc -c -o/Users/toby.liao/Documents/storage/course/ns3/ns-3-allinone/ns-3-dev/build/scratch/hw_skeleton.cc.14.o -I/usr/local/opt/qt/include",
     "file": "../scratch/hw_skeleton.cc"
   },
   {
     "directory": "/Users/toby.liao/Documents/storage/course/ns3/ns-3-allinone/ns-3-dev/build",
-    "command": "/usr/bin/clang++ -O0 -ggdb -g3 -Wall -Werror -Wno-unused-local-typedefs -Wno-potentially-evaluated-expression -std=c++11 -I. -I.. -I/usr/local/include -I/usr/include/libxml2 -DNS3_BUILD_PROFILE_DEBUG -DNS3_ASSERT_ENABLE -DNS3_LOG_ENABLE -DHAVE_SYS_IOCTL_H=1 -DHAVE_IF_NETS_H=1 -DHAVE_NET_ETHERNET_H=1 -DHAVE_SQLITE3=1 ../scratch/wifi-tcp.cc -c -o/Users/toby.liao/Documents/storage/course/ns3/ns-3-allinone/ns-3-dev/build/scratch/wifi-tcp.cc.14.o -I/usr/local/opt/qt/include",
+    "command": "/usr/bin/clang++ -O0 -ggdb -g3 -Wall -Werror -Wno-unused-local-typedefs -Wno-potentially-evaluated-expression -std=c++11 -I. -I.. -I/usr/local/include -I/usr/include/libxml2 -DNS3_BUILD_PROFILE_DEBUG -DNS3_ASSERT_ENABLE -DNS3_LOG_ENABLE -DHAVE_SYS_IOCTL_H=1 -DHAVE_IF_NETS_H=1 -DHAVE_NET_ETHERNET_H=1 -DHAVE_SQLITE3=1 ../scratch/wifi-tcp.cc -c -o/Users/toby.liao/Documents/storage/course/ns3/ns-3-allinone/ns-3-dev/build/scratch/wifi-tcp.cc.15.o -I/usr/local/opt/qt/include",
     "file": "../scratch/wifi-tcp.cc"
   },
   {
     "directory": "/Users/toby.liao/Documents/storage/course/ns3/ns-3-allinone/ns-3-dev/build",
-    "command": "/usr/bin/clang++ -O0 -ggdb -g3 -Wall -Werror -Wno-unused-local-typedefs -Wno-potentially-evaluated-expression -std=c++11 -I. -I.. -I/usr/local/include -I/usr/include/libxml2 -DNS3_BUILD_PROFILE_DEBUG -DNS3_ASSERT_ENABLE -DNS3_LOG_ENABLE -DHAVE_SYS_IOCTL_H=1 -DHAVE_IF_NETS_H=1 -DHAVE_NET_ETHERNET_H=1 -DHAVE_SQLITE3=1 ../scratch/mysecond.cc -c -o/Users/toby.liao/Documents/storage/course/ns3/ns-3-allinone/ns-3-dev/build/scratch/mysecond.cc.15.o -I/usr/local/opt/qt/include",
+    "command": "/usr/bin/clang++ -O0 -ggdb -g3 -Wall -Werror -Wno-unused-local-typedefs -Wno-potentially-evaluated-expression -std=c++11 -I. -I.. -I/usr/local/include -I/usr/include/libxml2 -DNS3_BUILD_PROFILE_DEBUG -DNS3_ASSERT_ENABLE -DNS3_LOG_ENABLE -DHAVE_SYS_IOCTL_H=1 -DHAVE_IF_NETS_H=1 -DHAVE_NET_ETHERNET_H=1 -DHAVE_SQLITE3=1 ../scratch/mysecond.cc -c -o/Users/toby.liao/Documents/storage/course/ns3/ns-3-allinone/ns-3-dev/build/scratch/mysecond.cc.16.o -I/usr/local/opt/qt/include",
     "file": "../scratch/mysecond.cc"
   },
   {
@@ -6306,7 +6306,7 @@
   },
   {
     "directory": "/Users/toby.liao/Documents/storage/course/ns3/ns-3-allinone/ns-3-dev/build",
-    "command": "/usr/bin/clang++ -O0 -ggdb -g3 -Wall -Werror -Wno-unused-local-typedefs -Wno-potentially-evaluated-expression -std=c++11 -I. -I.. -I/usr/local/include -I/usr/include/libxml2 -DNS3_BUILD_PROFILE_DEBUG -DNS3_ASSERT_ENABLE -DNS3_LOG_ENABLE -DHAVE_SYS_IOCTL_H=1 -DHAVE_IF_NETS_H=1 -DHAVE_NET_ETHERNET_H=1 -DHAVE_SQLITE3=1 ../scratch/multimedia_packet_structure_csma.cc -c -o/Users/toby.liao/Documents/storage/course/ns3/ns-3-allinone/ns-3-dev/build/scratch/multimedia_packet_structure_csma.cc.9.o -I/usr/local/opt/qt/include",
+    "command": "/usr/bin/clang++ -O0 -ggdb -g3 -Wall -Werror -Wno-unused-local-typedefs -Wno-potentially-evaluated-expression -std=c++11 -I. -I.. -I/usr/local/include -I/usr/include/libxml2 -DNS3_BUILD_PROFILE_DEBUG -DNS3_ASSERT_ENABLE -DNS3_LOG_ENABLE -DHAVE_SYS_IOCTL_H=1 -DHAVE_IF_NETS_H=1 -DHAVE_NET_ETHERNET_H=1 -DHAVE_SQLITE3=1 ../scratch/multimedia_packet_structure_csma.cc -c -o/Users/toby.liao/Documents/storage/course/ns3/ns-3-allinone/ns-3-dev/build/scratch/multimedia_packet_structure_csma.cc.10.o -I/usr/local/opt/qt/include",
     "file": "../scratch/multimedia_packet_structure_csma.cc"
   },
   {
@@ -6318,5 +6318,10 @@
     "directory": "/Users/toby.liao/Documents/storage/course/ns3/ns-3-allinone/ns-3-dev/build",
     "command": "/usr/bin/clang++ -O0 -ggdb -g3 -Wall -Werror -Wno-unused-local-typedefs -Wno-potentially-evaluated-expression -std=c++11 -I. -I.. -I/usr/local/include -I/usr/include/libxml2 -DNS3_BUILD_PROFILE_DEBUG -DNS3_ASSERT_ENABLE -DNS3_LOG_ENABLE -DHAVE_SYS_IOCTL_H=1 -DHAVE_IF_NETS_H=1 -DHAVE_NET_ETHERNET_H=1 -DHAVE_SQLITE3=1 ../scratch/multimedia_packet_structure_2udp.cc -c -o/Users/toby.liao/Documents/storage/course/ns3/ns-3-allinone/ns-3-dev/build/scratch/multimedia_packet_structure_2udp.cc.5.o -I/usr/local/opt/qt/include",
     "file": "../scratch/multimedia_packet_structure_2udp.cc"
+  },
+  {
+    "directory": "/Users/toby.liao/Documents/storage/course/ns3/ns-3-allinone/ns-3-dev/build",
+    "command": "/usr/bin/clang++ -O0 -ggdb -g3 -Wall -Werror -Wno-unused-local-typedefs -Wno-potentially-evaluated-expression -std=c++11 -I. -I.. -I/usr/local/include -I/usr/include/libxml2 -DNS3_BUILD_PROFILE_DEBUG -DNS3_ASSERT_ENABLE -DNS3_LOG_ENABLE -DHAVE_SYS_IOCTL_H=1 -DHAVE_IF_NETS_H=1 -DHAVE_NET_ETHERNET_H=1 -DHAVE_SQLITE3=1 ../scratch/multimedia_packet_structure_1udp_1tcp.cc -c -o/Users/toby.liao/Documents/storage/course/ns3/ns-3-allinone/ns-3-dev/build/scratch/multimedia_packet_structure_1udp_1tcp.cc.6.o -I/usr/local/opt/qt/include",
+    "file": "../scratch/multimedia_packet_structure_1udp_1tcp.cc"
   }
 ]
