@@ -286,7 +286,9 @@ void experiment(std::string queue_disc_type)
   // src_tcp_App.Stop(Seconds(stoptime));
   
   
-  for (float time = 0.0 ; time<stoptime; time+=.27){
+  for (float time = 0.0 ; time<stoptime; time+=.27){ 
+    // for the .27 here, I look at the pcap of (3-2) and know the last packet time 
+    // if I shorten the value, it pop up the error
     Simulator::Schedule (Seconds (time),&StartFlow, srcSocket_tcp, dstaddr_tcp, dstport_tcp);
   }
 
