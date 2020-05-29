@@ -224,12 +224,19 @@ void experiment(std::string queue_disc_type)
   dstSocket->Bind (dst);
   dstSocket->SetRecvCallback (MakeCallback (&dstSocketRecv));
 
-  uint16_t dstport_tcp = 12347;
-  Ipv4Address dstaddr_tcp ("10.30.1.2");
-  PacketSinkHelper sink ("ns3::TcpSocketFactory", InetSocketAddress (Ipv4Address::GetAny (), dstport_tcp));
-  ApplicationContainer apps = sink.Install (nDst);
-  apps.Start (Seconds (0.0));
-  apps.Stop (Seconds (10.0));
+  // Ptr<Socket> dstSocket_tcp = Socket::CreateSocket (nDst, TypeId::LookupByName ("ns3::TcpSocketFactory"));
+  // uint16_t dstport_tcp = 12347;
+  // Ipv4Address dstaddr_tcp ("10.30.1.2");
+  // InetSocketAddress dst_tcp = InetSocketAddress (dstaddr_tcp, dstport_tcp);
+  // dstSocket_tcp->Bind (dst_tcp);
+  // dstSocket_tcp->SetRecvCallback (MakeCallback (&dstSocketRecv));
+
+  // uint16_t dstport_tcp = 12347;
+  // Ipv4Address dstaddr_tcp ("10.30.1.2");
+  // PacketSinkHelper sink ("ns3::TcpSocketFactory", InetSocketAddress (Ipv4Address::GetAny (), dstport_tcp));
+  // ApplicationContainer apps = sink.Install (nDst);
+  // apps.Start (Seconds (0.0));
+  // apps.Stop (Seconds (10.0));
   
   AsciiTraceHelper ascii;
   bottleneckLink.EnableAsciiAll (ascii.CreateFileStream ("socket-bound-static-routing.tr"));
@@ -285,11 +292,11 @@ void experiment(std::string queue_disc_type)
   // src_tcp_App.Start(Seconds(0));
   // src_tcp_App.Stop(Seconds(stoptime));
   
-  
-  for (float time = 0.0 ; time<stoptime; time+=.27){ 
+  uint16_t dstport_tcp = 12347;
+  for (float time = 0.0 ; time<stoptime; time+=.03){ 
     // for the .27 here, I look at the pcap of (3-2) and know the last packet time 
     // if I shorten the value, it pop up the error
-    Simulator::Schedule (Seconds (time),&StartFlow, srcSocket_tcp, dstaddr_tcp, dstport_tcp);
+    Simulator::Schedule (Seconds (time),&StartFlow, srcSocket_tcp, dstaddr, dstport_tcp);
   }
 
   Ptr<QueueDisc> queue = queueDiscs.Get (0);
@@ -457,6 +464,6 @@ main (int argc, char **argv)
   // experiment ("PfifoFastQueueDisc");
   // std::cout << "Simulation with PFIFO QueueDisc: End\n";
   
-  system("cd ./Multimedia_packet; source exec_overall.sh");
+  system("cd ./Multimedia_packet; rm *Disc *png; source exec_overall.sh");
   return 0;
 }
