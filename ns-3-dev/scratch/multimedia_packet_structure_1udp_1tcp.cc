@@ -131,8 +131,8 @@ void experiment(std::string queue_disc_type)
   int segment_size = 1446;
   float stoptime = 27.0;
   int simulation_start_ts = 0;
-  std::string bottleneckBandwidth = "10Mbps";
-  std::string bottleneckDelay = "1ms";
+  std::string bottleneckBandwidth = "13Mbps";
+  std::string bottleneckDelay = "10ms";
   std::string accessBandwidth = "100Mbps";
   std::string accessDelay = "1ms";
 
@@ -224,19 +224,10 @@ void experiment(std::string queue_disc_type)
   dstSocket->Bind (dst);
   dstSocket->SetRecvCallback (MakeCallback (&dstSocketRecv));
 
-  // Ptr<Socket> dstSocket_tcp = Socket::CreateSocket (nDst, TypeId::LookupByName ("ns3::TcpSocketFactory"));
-  // uint16_t dstport_tcp = 12347;
-  // Ipv4Address dstaddr_tcp ("10.30.1.2");
-  // InetSocketAddress dst_tcp = InetSocketAddress (dstaddr_tcp, dstport_tcp);
-  // dstSocket_tcp->Bind (dst_tcp);
-  // dstSocket_tcp->SetRecvCallback (MakeCallback (&dstSocketRecv));
-
-  // uint16_t dstport_tcp = 12347;
-  // Ipv4Address dstaddr_tcp ("10.30.1.2");
+  uint16_t dstport_tcp = 12347;
   // PacketSinkHelper sink ("ns3::TcpSocketFactory", InetSocketAddress (Ipv4Address::GetAny (), dstport_tcp));
-  // ApplicationContainer apps = sink.Install (nDst);
-  // apps.Start (Seconds (0.0));
-  // apps.Stop (Seconds (10.0));
+  PacketSinkHelper sink ("ns3::TcpSocketFactory", InetSocketAddress (interfaces_dst.GetAddress(1), dstport_tcp));
+  ApplicationContainer apps = sink.Install (nDst);
   
   AsciiTraceHelper ascii;
   bottleneckLink.EnableAsciiAll (ascii.CreateFileStream ("socket-bound-static-routing.tr"));
@@ -272,32 +263,18 @@ void experiment(std::string queue_disc_type)
       }else {
         Simulator::Schedule (Seconds (time),&SendStuff, srcSocket, dstaddr, dstport, v[idx]);
       }
+      
   }
 
-  // for the tcp flow 
-  // // PacketSinkHelper sinkHelper ("ns3::TcpSocketFactory", InetSocketAddress(interfaces_src_tcp.GetAddress(0), dstport));
-  // PacketSinkHelper sinkHelper ("ns3::TcpSocketFactory", InetSocketAddress(Ipv4Address::GetAny(), dstport));
   
-  // AddressValue remoteAddr_tcp (InetSocketAddress(interfaces_src_tcp.GetAddress(1), dstport));
-  // BulkSendHelper ftp ("ns3::TcpSocketFactory", Address());
-  // ftp.SetAttribute ("Remote", remoteAddr_tcp);
-  // ftp.SetAttribute ("SendSize", UintegerValue(1000));
-
-  // ApplicationContainer src_tcp_App = ftp.Install(nSrc_tcp);
-  // src_tcp_App.Start(Seconds(0));
-  // src_tcp_App.Stop(Seconds(stoptime-1));
-
-  // sinkHelper.SetAttribute("Protocol", TypeIdValue (TcpSocketFactory::GetTypeId()));
-  // ApplicationContainer sinkApp = sinkHelper.Install(nDst);
-  // src_tcp_App.Start(Seconds(0));
-  // src_tcp_App.Stop(Seconds(stoptime));
-  
-  uint16_t dstport_tcp = 12347;
-  for (float time = 0.0 ; time<stoptime; time+=.03){ 
+  Simulator::Schedule (Seconds (0), &BindSock, srcSocket_tcp, dSrcGw0_tcp.Get(0));
+  for (float time = 0.0 ; time<stoptime; time+=.27){ 
     // for the .27 here, I look at the pcap of (3-2) and know the last packet time 
     // if I shorten the value, it pop up the error
-    Simulator::Schedule (Seconds (time),&StartFlow, srcSocket_tcp, dstaddr, dstport_tcp);
+    Simulator::Schedule (Seconds (time), &StartFlow, srcSocket_tcp, dstaddr, dstport_tcp);
+    apps.Start (Seconds (time));
   }
+  apps.Stop (Seconds (stoptime));
 
   Ptr<QueueDisc> queue = queueDiscs.Get (0);
   Simulator::ScheduleNow (&CheckQueueSize, queue, queue_disc_type);
@@ -436,6 +413,8 @@ main (int argc, char **argv)
 {
   CommandLine cmd;
   cmd.Parse (argc, argv);
+  system("cd ./Multimedia_packet; rm -r *Disc *png; cd ../");
+
   std::cout << "Simulation with FIFO QueueDisc: Start\n";
   experiment ("FifoQueueDisc");
   std::cout << "Simulation with FIFO QueueDisc: End\n";
@@ -464,6 +443,6 @@ main (int argc, char **argv)
   // experiment ("PfifoFastQueueDisc");
   // std::cout << "Simulation with PFIFO QueueDisc: End\n";
   
-  system("cd ./Multimedia_packet; rm *Disc *png; source exec_overall.sh");
+  system("cd ./Multimedia_packet; source exec_overall.sh");
   return 0;
 }
