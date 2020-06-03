@@ -131,7 +131,7 @@ void experiment(std::string queue_disc_type)
   int segment_size = 1446;
   float stoptime = 27.0;
   int simulation_start_ts = 0;
-  std::string bottleneckBandwidth = "13Mbps";
+  std::string bottleneckBandwidth = "25Mbps";
   std::string bottleneckDelay = "10ms";
   std::string accessBandwidth = "100Mbps";
   std::string accessDelay = "1ms";
@@ -225,8 +225,8 @@ void experiment(std::string queue_disc_type)
   dstSocket->SetRecvCallback (MakeCallback (&dstSocketRecv));
 
   uint16_t dstport_tcp = 12347;
-  // PacketSinkHelper sink ("ns3::TcpSocketFactory", InetSocketAddress (Ipv4Address::GetAny (), dstport_tcp));
-  PacketSinkHelper sink ("ns3::TcpSocketFactory", InetSocketAddress (interfaces_dst.GetAddress(1), dstport_tcp));
+  PacketSinkHelper sink ("ns3::TcpSocketFactory", InetSocketAddress (Ipv4Address::GetAny (), dstport_tcp));
+  // PacketSinkHelper sink ("ns3::TcpSocketFactory", InetSocketAddress (interfaces_dst.GetAddress(1), dstport_tcp));
   ApplicationContainer apps = sink.Install (nDst);
   
   AsciiTraceHelper ascii;
@@ -267,14 +267,20 @@ void experiment(std::string queue_disc_type)
   }
 
   
-  Simulator::Schedule (Seconds (0), &BindSock, srcSocket_tcp, dSrcGw0_tcp.Get(0));
-  for (float time = 0.0 ; time<stoptime; time+=.27){ 
+  
+  for (float time = 0.0 ; time<stoptime; time+=.5){ 
     // for the .27 here, I look at the pcap of (3-2) and know the last packet time 
     // if I shorten the value, it pop up the error
+    Simulator::Schedule (Seconds (time), &BindSock, srcSocket_tcp, dSrcGw0_tcp.Get(0));
     Simulator::Schedule (Seconds (time), &StartFlow, srcSocket_tcp, dstaddr, dstport_tcp);
     apps.Start (Seconds (time));
   }
   apps.Stop (Seconds (stoptime));
+
+  // Simulator::Schedule (Seconds (0), &BindSock, srcSocket_tcp, dSrcGw0_tcp.Get(0));
+  // Simulator::Schedule (Seconds (0), &StartFlow, srcSocket_tcp, dstaddr, dstport_tcp);
+  // apps.Start (Seconds (0));
+  // apps.Stop (Seconds (stoptime));
 
   Ptr<QueueDisc> queue = queueDiscs.Get (0);
   Simulator::ScheduleNow (&CheckQueueSize, queue, queue_disc_type);
